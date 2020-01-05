@@ -1,26 +1,39 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import NoteContainer from './note/NoteContainer'
+import FolderContainer from './folder/FolderContainer'
+import { Link, Switch, Route, BrowserRouter as Router } from 'react-router-dom'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+class App extends React.Component {
+
+  title = () => {
+    return (
+      <header>
+        <h1>Noteful</h1>
       </header>
-    </div>
-  );
+    )
+  }
+
+
+  render() {
+
+
+    return (
+      <Router>
+        <div className="App">
+          <Switch>
+            <Route path='/' exact component={this.title}/>
+            <Route path='/folders' render={() => <FolderContainer title={this.title} /> } />
+            {/* <Route path='/folders' component={FolderContainer} /> */}
+            <Route path='/notes' component={NoteContainer} />
+          </Switch>
+
+        </div>
+      </Router>
+    );
+
+  }
 }
+
 
 export default App;
