@@ -7,39 +7,98 @@ import { Link, Switch, Route, BrowserRouter as Router } from 'react-router-dom'
 
 class App extends React.Component {
 
-    state= {
-      folders: [],
-      notes: [],
-    }
+  state = {
+    folders: [],
+    notes: [],
+    currentFolderId: '',
+    currentNoteContent: '',
+  }
 
-    componentDidMount = () => {
-      this.setState ({
-        folders: StoreData.folders,
-        notes: StoreData.notes
-      })
-    }
+  componentDidMount = () => {
+    this.setState({
+      folders: StoreData.folders,
+      notes: StoreData.notes
+    })
+  }
 
-    renderFolder = () => {
-      StoreData.folders.map(folder => {
-        return <FolderContainer key={folder.id} />
-      })
-    }
+  folderClickHandler = (event) => {
+    console.log(event.target.id)
+    this.setState({
+      currentFolderId: event.target.id
+    })
+  }
 
+  noteClickHandler = (event) => {
+    console.log(event.target.content)
+    this.setState ({
+      currentNoteContent: event.target.content
+    })
+  }
+
+  filterNotes = () => {
+    const match = this.state.notes.filter(note => note.folderId === this.state.currentFolderId)
+    return match
+  }
+
+
+  renderFolderNames = () => {
+    return this.state.folders.map(folder => {
+      return (
+        <li key={folder.id} onClick={this.folderClickHandler} id={folder.id}>
+          {folder.name}
+        </li>
+      )
+    })
+  }
+
+  // what you see above and below give you the same results just in different ways.
+
+  renderNoteNames = () => {
+    const noteDataTransform = (note) => {
+      return (
+        <li key={note.id} onClick={this.noteClickHandler} content={note.content}>
+          {note.name}<br />
+          {note.modified} <br />
+          <button>Delete</button>
+        </li>
+      )
+    }
+    if (this.state.currentFolderId === '') {
+      return this.state.notes.map(noteDataTransform)
+    } else {
+      const filteredNotes = this.filterNotes();
+      return filteredNotes.map(noteDataTransform)
+    }
+  }
 
   render() {
 
-    console.log('test here')
-    console.log(this.renderFolder())
+    console.log()
+    console.log('testing')
     return (
       <Router>
         <div className="App">
+
           <Link to='/'>
             <header>
               <h1>Noteful</h1>
             </header>
           </Link>
+
+          <div className='folder_list'>
+            <ul>
+                {this.renderFolderNames()}
+            </ul>
+          </div>
+
+          <div className='note_list'>
+            <ul>    
+                {this.renderNoteNames()}
+            </ul>
+          </div>
+
           <Switch>
-            <Route path='/folders' render={() => <FolderContainer folders={this.renderFolder()}/>} />
+            <Route path='/folders' render={() => <FolderContainer />} />
             <Route path='/notes' component={NoteContainer} />
           </Switch>
         </div>
