@@ -28,10 +28,10 @@ class App extends React.Component {
     })
   }
 
-  noteClickHandler = (event) => {
-    console.log(event.target.content)
+  noteClickHandler = (content) => {
+    console.log(content)
     this.setState ({
-      currentNoteContent: event.target.content
+      currentNoteContent: content
     })
   }
 
@@ -39,7 +39,6 @@ class App extends React.Component {
     const match = this.state.notes.filter(note => note.folderId === this.state.currentFolderId)
     return match
   }
-
 
   renderFolderNames = () => {
     return this.state.folders.map(folder => {
@@ -56,7 +55,7 @@ class App extends React.Component {
   renderNoteNames = () => {
     const noteDataTransform = (note) => {
       return (
-        <li key={note.id} onClick={this.noteClickHandler} content={note.content}>
+        <li key={note.id} onClick={() => this.noteClickHandler(note.content)} content={note.content}>
           {note.name}<br />
           {note.modified} <br />
           <button>Delete</button>
