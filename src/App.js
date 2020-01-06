@@ -39,7 +39,7 @@ class App extends React.Component {
             </header>
           </Link>
           <Switch>
-            <Route path='/folders' render={() => <FolderContainer />} />
+            <Route path='/folders' render={() => <FolderContainer folders={this.renderFolder()}/>} />
             <Route path='/notes' component={NoteContainer} />
           </Switch>
         </div>
