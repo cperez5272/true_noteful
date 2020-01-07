@@ -22,15 +22,13 @@ class App extends React.Component {
   }
 
   folderClickHandler = (event) => {
-    console.log(event.target.id)
     this.setState({
       currentFolderId: event.target.id
     })
   }
 
   noteClickHandler = (content) => {
-    console.log(content)
-    this.setState ({
+    this.setState({
       currentNoteContent: content
     })
   }
@@ -56,7 +54,9 @@ class App extends React.Component {
     const noteDataTransform = (note) => {
       return (
         <li key={note.id} onClick={() => this.noteClickHandler(note.content)} content={note.content}>
-          {note.name}<br />
+          <Link to={`/notes/${note.id}`}>
+            {note.name}
+          </Link>
           {note.modified} <br />
           <button>Delete</button>
         </li>
@@ -71,9 +71,6 @@ class App extends React.Component {
   }
 
   render() {
-
-    console.log()
-    console.log('testing')
     return (
       <Router>
         <div className="App">
@@ -86,19 +83,19 @@ class App extends React.Component {
 
           <div className='folder_list'>
             <ul>
-                {this.renderFolderNames()}
+              {this.renderFolderNames()}
             </ul>
           </div>
 
           <div className='note_list'>
-            <ul>    
-                {this.renderNoteNames()}
+            <ul>
+              {this.renderNoteNames()}
             </ul>
           </div>
 
           <Switch>
             <Route path='/folders' render={() => <FolderContainer renderFolderNames={this.renderFolderNames()} />} />
-            <Route path='/notes/:noteId' component={NoteContainer} />
+            <Route path='/notes/:noteId' render={() => <NoteContainer notes={this.state.notes} />} />
           </Switch>
         </div>
       </Router>
