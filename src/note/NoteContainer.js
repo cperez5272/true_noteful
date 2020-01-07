@@ -7,11 +7,12 @@ class NoteContainer extends React.Component {
     state = {
         foundNote: {}
     }
-    findNote = () => {
-        const foundNote = this.props.notes.find(note => note.id === this.props.match.params.noteId)
-        this.setState({foundNote})
-        console.log(this.props)
+
+    componentDidMount() {
+        const foundNote = this.props.notes.find(note => note.id === this.props.match.params.noteId);
+        this.setState({foundNote: foundNote});
     }
+
     render() {
         return(
             <div>
