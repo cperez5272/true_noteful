@@ -25,8 +25,6 @@ class App extends React.Component {
     this.setState({
       currentFolderId: event.target.id,
     })
-    console.log(this.state.currentFolderName);
-
   }
 
   noteClickHandler = (content) => {
@@ -64,7 +62,7 @@ class App extends React.Component {
 
   render() {
 
-    const { folders, notes, currentFolderName } = this.state;
+    const { folders, notes, currentFolderId } = this.state;
 
     return (
       <Router>
@@ -72,19 +70,25 @@ class App extends React.Component {
 
           <Link to='/'>
             <header>
-              <h1>Noteful</h1>
+              <h1 onClick={() => this.setState({currentFolderId: ''})}>Noteful</h1>
             </header>
           </Link>
 
           <Switch>
-            <Route path='/folders' render={() => 
-              <FolderContainer 
+            <Route exact path="/" render={() => <FolderContainer 
                 folders={folders} 
                 clickHandler={this.folderClickHandler}
                 renderNoteNames={this.renderNoteNames}
-              />} 
+                />} 
             />
-            <Route path='/notes/:noteId' render={() => <NoteContainer notes={this.state.notes} />} />
+            <Route path='/folder/:folderId' render={() => <FolderContainer 
+                folders={folders} 
+                clickHandler={this.folderClickHandler}
+                renderNoteNames={this.renderNoteNames}
+                currentFolderId={currentFolderId}
+                />} 
+            />
+            <Route path='/notes/:noteId' render={() => <NoteContainer notes={notes} folders={folders}/>} />
           </Switch>
         </div>
       </Router>
