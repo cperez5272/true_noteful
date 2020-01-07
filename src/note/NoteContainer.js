@@ -5,7 +5,7 @@ class NoteContainer extends React.Component {
     render() {
         return(
             <div>
-                <h1>I am notes</h1>
+                {this.props.match.params.noteId}
             </div>
         )
     }

@@ -97,8 +97,8 @@ class App extends React.Component {
           </div>
 
           <Switch>
-            <Route path='/folders' render={() => <FolderContainer />} />
-            <Route path='/notes' component={NoteContainer} />
+            <Route path='/folders' render={() => <FolderContainer renderFolderNames={this.renderFolderNames()} />} />
+            <Route path='/notes/:noteId' component={NoteContainer} />
           </Switch>
         </div>
       </Router>
@@ -106,6 +106,5 @@ class App extends React.Component {
 
   }
 }
-
 
 export default App;
