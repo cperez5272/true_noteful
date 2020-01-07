@@ -23,7 +23,7 @@ class App extends React.Component {
 
   folderClickHandler = (event) => {
     this.setState({
-      currentFolderId: event.target.id
+      currentFolderId: event.target.id,
     })
   }
 
@@ -36,16 +36,6 @@ class App extends React.Component {
   filterNotes = () => {
     const match = this.state.notes.filter(note => note.folderId === this.state.currentFolderId)
     return match
-  }
-
-  renderFolderNames = () => {
-    return this.state.folders.map(folder => {
-      return (
-        <li key={folder.id} onClick={this.folderClickHandler} id={folder.id}>
-          {folder.name}
-        </li>
-      )
-    })
   }
 
   // what you see above and below give you the same results just in different ways.
@@ -71,31 +61,34 @@ class App extends React.Component {
   }
 
   render() {
+
+    const { folders, notes, currentFolderId } = this.state;
+
     return (
       <Router>
         <div className="App">
 
           <Link to='/'>
             <header>
-              <h1>Noteful</h1>
+              <h1 onClick={() => this.setState({currentFolderId: ''})}>Noteful</h1>
             </header>
           </Link>
 
-          <div className='folder_list'>
-            <ul>
-              {this.renderFolderNames()}
-            </ul>
-          </div>
-
-          <div className='note_list'>
-            <ul>
-              {this.renderNoteNames()}
-            </ul>
-          </div>
-
           <Switch>
-            <Route path='/folders' render={() => <FolderContainer renderFolderNames={this.renderFolderNames()} />} />
-            <Route path='/notes/:noteId' render={() => <NoteContainer notes={this.state.notes} />} />
+            <Route exact path="/" render={() => <FolderContainer 
+                folders={folders} 
+                clickHandler={this.folderClickHandler}
+                renderNoteNames={this.renderNoteNames}
+                />} 
+            />
+            <Route path='/folder/:folderId' render={() => <FolderContainer 
+                folders={folders} 
+                clickHandler={this.folderClickHandler}
+                renderNoteNames={this.renderNoteNames}
+                currentFolderId={currentFolderId}
+                />} 
+            />
+            <Route path='/notes/:noteId' render={() => <NoteContainer notes={notes} folders={folders}/>} />
           </Switch>
         </div>
       </Router>
