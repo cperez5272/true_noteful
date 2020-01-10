@@ -1,17 +1,20 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import '../App.css'
+import Context from '../Context'
 
 class FolderContainer extends React.Component {
 
+    static contextType = Context
+
     renderFolderNames = () => {
-        return this.props.folders.map(folder => {
+        return this.context.folders.map(folder => {
           return (
             <Link to={`/folder/${folder.id}`} key={folder.id}>
                 <li 
-                    onClick={this.props.clickHandler} 
+                    onClick={this.context.folderClickHandler} 
                     id={folder.id}
-                    className={ folder.id === this.props.currentFolderId ? "active" : null}
+                    className={ folder.id === this.context.currentFolderId ? "active" : null}
                 >
                     {folder.name}
                 </li>

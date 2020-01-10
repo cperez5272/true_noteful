@@ -4,6 +4,7 @@ import NoteContainer from './note/NoteContainer'
 import FolderContainer from './folder/FolderContainer'
 import StoreData from './DummyStore'
 import { Link, Switch, Route, BrowserRouter as Router } from 'react-router-dom'
+import Context from './Context'
 
 class App extends React.Component {
 
@@ -15,10 +16,29 @@ class App extends React.Component {
   }
 
   componentDidMount = () => {
-    this.setState({
-      folders: StoreData.folders,
-      notes: StoreData.notes
-    })
+    fetch(`http://localhost:9090/folders`)
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        this.setState({
+          folders: data
+        })
+      })
+    this.fetchNotes()
+  }
+
+  fetchNotes = () => {
+    fetch(`http://localhost:9090/notes`)
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data)
+        this.setState({
+          notes: data
+        })
+      })
   }
 
   folderClickHandler = (event) => {
@@ -38,7 +58,34 @@ class App extends React.Component {
     return match
   }
 
+  removeNote = (noteId) => {
+    const newNotes = this.state.notes.filter(note => note.id !== noteId)
+    this.setState({
+      notes: newNotes
+    })
+    console.log('click!')
+  }
+
   // what you see above and below give you the same results just in different ways.
+
+
+  deleteNoteRequest(noteId, callback) {
+    fetch(`http://localhost:9090/notes/${noteId}`, { method: 'DELETE' })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(error => {
+            throw error
+          })
+        }
+        return response.json()
+      })
+      .then(data => {
+        callback(noteId)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 
   renderNoteNames = () => {
     const noteDataTransform = (note) => {
@@ -48,7 +95,7 @@ class App extends React.Component {
             {note.name}
           </Link>
           {note.modified} <br />
-          <button>Delete</button>
+          <button onClick={() => this.deleteNoteRequest(note.id, this.removeNote)}>Delete</button>
         </li>
       )
     }
@@ -64,34 +111,52 @@ class App extends React.Component {
 
     const { folders, notes, currentFolderId } = this.state;
 
+    const contextValue = {
+      folders: this.state.folders,
+      notes: this.state.notes,
+      currentFolderId: this.state.currentFolderId,
+      currentNoteContent: this.state.currentNoteContent,
+      folderClickHandler: this.folderClickHandler,
+      renderNoteNames: this.renderNoteNames,
+      removeNote: this.removeNote,
+
+    }
+
     return (
-      <Router>
-        <div className="App">
+      <Context.Provider value={contextValue}>
+        <Router>
+          <div className="App">
 
-          <Link to='/'>
-            <header>
-              <h1 onClick={() => this.setState({currentFolderId: ''})}>Noteful</h1>
-            </header>
-          </Link>
+            <Link to='/'>
+              <header>
+                <h1 onClick={() => this.setState({ currentFolderId: '' })}>Noteful</h1>
+              </header>
+            </Link>
 
-          <Switch>
-            <Route exact path="/" render={() => <FolderContainer 
-                folders={folders} 
+            <Switch>
+              <Route exact path="/" render={() => <FolderContainer
+                folders={folders}
                 clickHandler={this.folderClickHandler}
                 renderNoteNames={this.renderNoteNames}
-                />} 
-            />
-            <Route path='/folder/:folderId' render={() => <FolderContainer 
-                folders={folders} 
+              />}
+              />
+              <Route path='/folder/:folderId' render={() => <FolderContainer
+                folders={folders}
                 clickHandler={this.folderClickHandler}
                 renderNoteNames={this.renderNoteNames}
                 currentFolderId={currentFolderId}
-                />} 
-            />
-            <Route path='/notes/:noteId' render={() => <NoteContainer notes={notes} folders={folders}/>} />
-          </Switch>
-        </div>
-      </Router>
+              />}
+              />
+              <Route path='/notes/:noteId' render={() => <NoteContainer
+                notes={notes}
+                folders={folders}
+              />}
+              />
+
+            </Switch>
+          </div>
+        </Router>
+      </Context.Provider>
     );
 
   }
