@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import '../App.css'
 import Context from '../Context'
+import AddFolder from '../AddFolder'
 
 class FolderContainer extends React.Component {
 
@@ -23,6 +24,8 @@ class FolderContainer extends React.Component {
         })
       }
 
+
+
     render() {
         return (
             <>
@@ -30,6 +33,7 @@ class FolderContainer extends React.Component {
                     <ul>
                         {this.renderFolderNames()}
                     </ul>
+                    <AddFolder />
                 </div>
 
                 <div className='note_list'>
