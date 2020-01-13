@@ -152,7 +152,6 @@ class App extends React.Component {
                 folders={folders}
               />}
               />
-
             </Switch>
           </div>
         </Router>

@@ -1,7 +1,6 @@
 import React from 'react'
 import ValidationError from './ValidationError'
 
-
 class AddFolder extends React.Component {
     constructor () {
         super()
@@ -10,6 +9,32 @@ class AddFolder extends React.Component {
             folderName: ''
         }
     }
+
+    postFolderRequest(folderId, callback) {
+        fetch(`http://localhost:9090/folders/${folderId}`, { method: 'POST' })
+          .then(response => {
+            if (!response.ok) {
+              return response.json().then(error => {
+                throw error
+              })
+            }
+            return response.json()
+          })
+          .then(data => {
+            callback(folderId)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
+
+      addFolder = (folderId) => {
+          const newFolders = this.state.folderName.spread(folder => folder.id !== folderId)
+          this.setState({
+            folderName: newFolders
+          })
+          console.log('click!')
+        }
 
     FormHandler = () => {
         this.setState ({
@@ -30,14 +55,11 @@ class AddFolder extends React.Component {
         } else if (name.length < 3) {
             return 'Name must be at least 3 characters long';
         }
-        console.log('click')
     }
 
     handleFormSubmit = (event) => {
         event.preventDefault()
-        const { name } = this.state
-        console.log('Name: ', name.folderName)
-        
+        console.log('Name: ', this.state.folderName)
     }
 
     hiddenForm = () => {
@@ -47,9 +69,9 @@ class AddFolder extends React.Component {
                     <h2>Folder Form</h2>
                     <div>
                         <label>Name:</label>
-                        <input type='text' onChange={ event => this.updateFolder(event.target.folderName)}/>
+                        <input type='text' onChange={ event => this.updateFolder(event.target.value)}/>
                         {this.state.showForm && (<ValidationError message={this.validateNewFolder()}/>)}
-                        <button type= 'submit' disabled= {this.validateNewFolder()}>Click</button>
+                        <button type= 'submit' disabled= {this.validateNewFolder()} onClick={() => this.postFolderRequest(this.addFolder)}>Add New Folder</button>
                     </div>
                 </form>
             </div>
@@ -71,6 +93,5 @@ class AddFolder extends React.Component {
         )
     }
 }
-
 
 export default AddFolder
