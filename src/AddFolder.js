@@ -2,48 +2,76 @@ import React from 'react'
 import ValidationError from './ValidationError'
 
 class AddFolder extends React.Component {
-    constructor () {
+    constructor() {
         super()
         this.state = {
             showForm: false,
-            folderName: ''
+            folderName: '',
         }
     }
 
-    postFolderRequest(folderId, callback) {
-        fetch(`http://localhost:9090/folders/${folderId}`, { method: 'POST' })
-          .then(response => {
-            if (!response.ok) {
-              return response.json().then(error => {
-                throw error
-              })
-            }
-            return response.json()
-          })
-          .then(data => {
-            callback(folderId)
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
+    // postFolderRequest(folderId, callback) {
+    //     fetch(`http://localhost:9090/folders/`, { method: 'POST' })
+    //       .then(response => {
+    //         if (!response.ok) {
+    //           return response.json().then(error => {
+    //             throw error
+    //           })
+    //         }
+    //         return response.json()
+    //       })
+    //       .then(data => {
+    //         // callback(folderId)
+    //       })
+    //       .catch(error => {
+    //         console.log(error)
+    //       })
+    //   }
 
-      addFolder = (folderId) => {
-          const newFolders = this.state.folderName.spread(folder => folder.id !== folderId)
-          this.setState({
+
+    postFolderRequest(folderName) {
+        fetch(`http://localhost:9090/folders/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: folderName
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(error => {
+                        throw error
+                    })
+                }
+                return response.json()
+            })
+            .then(data => {
+                // callback(folderId)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+
+    addFolder = (folderId) => {
+        const newFolders = this.state.folderName.spread(folder => folder.id !== folderId)
+        this.setState({
             folderName: newFolders
-          })
-          console.log('click!')
-        }
+        })
+        console.log('click!')
+    }
 
     FormHandler = () => {
-        this.setState ({
+        this.setState({
             showForm: !this.state.showForm
         })
     }
 
     updateFolder = (name) => {
-        this.setState ({
+        this.setState({
             folderName: name
         })
     }
@@ -63,23 +91,37 @@ class AddFolder extends React.Component {
     }
 
     hiddenForm = () => {
-        return(
+        return (
             <div>
-                <form onSubmit = {event => this.handleFormSubmit(event)}>
+                <form onSubmit={event => this.handleFormSubmit(event)}>
                     <h2>Folder Form</h2>
                     <div>
                         <label>Name:</label>
-                        <input type='text' onChange={ event => this.updateFolder(event.target.value)}/>
-                        {this.state.showForm && (<ValidationError message={this.validateNewFolder()}/>)}
-                        <button type= 'submit' disabled= {this.validateNewFolder()} onClick={() => this.postFolderRequest(this.addFolder)}>Add New Folder</button>
+                        <input type='text' onChange={event => this.updateFolder(event.target.value)} />
+                        {this.state.showForm && (<ValidationError message={this.validateNewFolder()} />)}
+                        <button type='submit' disabled={this.validateNewFolder()} onClick={() => this.postFolderRequest(this.addFolder)}>Add New Folder</button>
                     </div>
                 </form>
             </div>
         )
     }
 
+    hiddenFolder = () => {
+        return (
+            <div>
+                <h2>Heeeey</h2>
+            </div>
+        )
+    }
+
+    surpiseFolder = () => {
+        if (this.state.showForm) {
+            return this.hiddenFolder()
+        }
+    }
+
     surpiseForm = () => {
-        if(this.state.showForm) {
+        if (this.state.showForm) {
             return this.hiddenForm()
         }
     }

@@ -10,6 +10,32 @@ class AddNote extends React.Component {
         }
     }
 
+    postNoteRequest(folderId, callback) {
+        fetch(`http://localhost:9090/notes`, { method: 'POST' })
+          .then(response => {
+            if (!response.ok) {
+              return response.json().then(error => {
+                throw error
+              })
+            }
+            return response.json()
+          })
+          .then(data => {
+            // callback(folderId)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
+
+      addNote = (noteId) => {
+        const newNotes = this.state.folderName.spread(note => note.id !== noteId)
+        this.setState({
+          noteName: newNotes
+        })
+        console.log('click!')
+      }
+
     FormHandler = () => {
         this.setState ({
             showForm: !this.state.showForm
@@ -45,7 +71,7 @@ class AddNote extends React.Component {
                         <label>Name:</label>
                         <input type='text' onChange={ event => this.updateNote(event.target.value)}/>
                         {this.state.showForm && (<ValidationError message={this.validateNewNote()}/>)}
-                        <button type= 'submit' disabled= {this.validateNewNote()}>Click</button>
+                        <button type= 'submit' disabled= {this.validateNewNote()} onClick={() => this.postNoteRequest(this.addNote)}>Click</button>
                     </div>
                 </form>
             </div>
