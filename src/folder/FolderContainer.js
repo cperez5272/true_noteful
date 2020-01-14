@@ -4,6 +4,7 @@ import '../App.css'
 import Context from '../Context'
 import AddNote from '../AddNote'
 import AddFolder from '../AddFolder'
+import ErrorBoundary from '../ErrorBoundary';
 
 class FolderContainer extends React.Component {
 
@@ -11,19 +12,21 @@ class FolderContainer extends React.Component {
 
     renderFolderNames = () => {
         return this.context.folders.map(folder => {
-          return (
-            <Link to={`/folder/${folder.id}`} key={folder.id}>
-                <li 
-                    onClick={this.context.folderClickHandler} 
-                    id={folder.id}
-                    className={ folder.id === this.context.currentFolderId ? "active" : null}
-                >
-                    {folder.name}
-                </li>
-            </Link>
-          )
+            return (
+                <Link to={`/folder/${folder.id}`} key={folder.id}>
+                    <li
+                        onClick={this.context.folderClickHandler}
+                        id={folder.id}
+                        className={folder.id === this.context.currentFolderId ? "active" : null}
+                    >
+                        <ErrorBoundary>
+                            {folder.name}
+                        </ErrorBoundary>
+                    </li>
+                </Link>
+            )
         })
-      }
+    }
 
 
 

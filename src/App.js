@@ -5,6 +5,7 @@ import FolderContainer from './folder/FolderContainer'
 import StoreData from './DummyStore'
 import { Link, Switch, Route, BrowserRouter as Router } from 'react-router-dom'
 import Context from './Context'
+import PropTypes from 'prop-types'
 
 class App extends React.Component {
 
@@ -159,6 +160,15 @@ class App extends React.Component {
     );
 
   }
+  
 }
+
+App.propTypes = {
+    folders: PropTypes.array,
+    notes: PropTypes.array,
+    currentFolderId: PropTypes.string,
+    currentNoteContent: PropTypes.string
+}
+
 
 export default App;

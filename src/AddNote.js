@@ -1,42 +1,48 @@
-import React from 'react'
+import React from 'react';
+import { withRouter } from 'react-router-dom';
 import ValidationError from './ValidationError'
-import './App.css'
+import './App.css';
+import PropTypes from 'prop-types'
 
 class AddNote extends React.Component {
-    constructor () {
-        super()
-        this.state = {
-            showForm: false,
-            noteName: '',
-            noteContent: ''
-        }
+
+    state = {
+        showForm: false,
+        noteName: '',
+        noteContent: '',
     }
 
     postNoteRequest = () => {
-        console.log()
+        const { noteName, noteContent, } = this.state;
+        const d = new Date().toISOString();
+        const obj = {
+            name: noteName, 
+            content: noteContent, 
+            modified: d, 
+            folderId: this.props.match.params.folderId
+        }
+        console.log(obj);
         fetch(`http://localhost:9090/notes/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                name: this.state.noteName
-            })
+            body: JSON.stringify(obj)
         })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(error => {
-                        throw error
-                    })
-                }
-                return response.json()
-            })
-            .then(data => {
-                // callback(folderId)
-            })
-            .catch(error => {
-                console.log(error)
-            })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(error => {
+                    throw error
+                })
+            }
+            return response.json()
+        })
+        .then(data => {
+            // callback(folderId)
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
       addNote = (noteId) => {
@@ -47,7 +53,7 @@ class AddNote extends React.Component {
         console.log('click!')
       }
 
-    FormHandler = () => {
+    renderForm = () => {
         this.setState ({
             showForm: !this.state.showForm
         })
@@ -73,37 +79,37 @@ class AddNote extends React.Component {
         console.log('Name: ', this.state.noteName)
     }
 
-    hiddenForm = () => {
+    noteForm = () => {
         return(
             <div>
                 <form onSubmit = {event => this.handleFormSubmit(event)}>
                     <h2>Note Form</h2>
                     <div>
                         <label>Name:</label>
-                        <input type='text' name='name' onChange={ this.updateNote }/>
+                        <input type='text' name='noteName' value={this.state.noteName} onChange={this.updateNote}/>
                         {this.state.showForm && (<ValidationError message={this.validateNewNote()}/>)}
                         <textarea type='text' name='noteContent' value={this.state.noteContent} onChange={this.updateNote}/>
-                        <button type= 'submit' disabled= {this.validateNewNote()} onClick={() => this.postNoteRequest(this.addNote)}>Click</button>
+                        <button type='submit' onClick={() => this.postNoteRequest(this.addNote)}>Click</button>
                     </div>
                 </form>
             </div>
         )
     }
 
-    surpiseForm = () => {
-        if(this.state.showForm) {
-            return this.hiddenForm()
-        }
-    }
-
     render() {
         return (
             <div>
-                <button onClick={this.FormHandler}>Click For New Note</button>
-                {this.surpiseForm()}
+                <button onClick={this.renderForm}> {!this.state.showForm ? 'show form' : 'remove form'} </button>
+                {this.state.showForm ? this.noteForm() : null }
             </div>
         )
     }
 }
 
-export default AddNote
+AddNote.prototype = {
+    showForm: PropTypes.bool,
+    noteName: PropTypes.string,
+    noteContent: PropTypes.string,
+}
+
+export default withRouter(AddNote);

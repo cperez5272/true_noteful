@@ -1,5 +1,6 @@
 import React from 'react'
 import ValidationError from './ValidationError'
+import PropTypes from 'prop-types'
 
 class AddFolder extends React.Component {
     constructor() {
@@ -116,6 +117,11 @@ class AddFolder extends React.Component {
             </div>
         )
     }
+}
+
+AddFolder.prototype = {
+    showForm: PropTypes.bool,
+    folderName: PropTypes.string
 }
 
 export default AddFolder
