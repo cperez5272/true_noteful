@@ -1,32 +1,43 @@
 import React from 'react'
 import ValidationError from './ValidationError'
+import './App.css'
 
 class AddNote extends React.Component {
     constructor () {
         super()
         this.state = {
             showForm: false,
-            noteName: ''
+            noteName: '',
+            noteContent: ''
         }
     }
 
-    postNoteRequest(folderId, callback) {
-        fetch(`http://localhost:9090/notes`, { method: 'POST' })
-          .then(response => {
-            if (!response.ok) {
-              return response.json().then(error => {
-                throw error
-              })
-            }
-            return response.json()
-          })
-          .then(data => {
-            // callback(folderId)
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
+    postNoteRequest = () => {
+        console.log()
+        fetch(`http://localhost:9090/notes/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: this.state.noteName
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(error => {
+                        throw error
+                    })
+                }
+                return response.json()
+            })
+            .then(data => {
+                // callback(folderId)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
 
       addNote = (noteId) => {
         const newNotes = this.state.folderName.spread(note => note.id !== noteId)
@@ -42,9 +53,9 @@ class AddNote extends React.Component {
         })
     }
 
-    updateNote = (name) => {
+    updateNote = (event) => {
         this.setState ({
-            noteName: name
+            [event.target.name]: event.target.value
         })
     }
 
@@ -69,8 +80,9 @@ class AddNote extends React.Component {
                     <h2>Note Form</h2>
                     <div>
                         <label>Name:</label>
-                        <input type='text' onChange={ event => this.updateNote(event.target.value)}/>
+                        <input type='text' name='name' onChange={ this.updateNote }/>
                         {this.state.showForm && (<ValidationError message={this.validateNewNote()}/>)}
+                        <textarea type='text' name='noteContent' value={this.state.noteContent} onChange={this.updateNote}/>
                         <button type= 'submit' disabled= {this.validateNewNote()} onClick={() => this.postNoteRequest(this.addNote)}>Click</button>
                     </div>
                 </form>

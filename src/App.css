@@ -49,3 +49,7 @@ header {
   background-color: green;
   color: whitesmoke;
 }
+.expandText {
+  height: 130px;
+  width: 90%;
+}

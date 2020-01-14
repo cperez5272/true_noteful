@@ -10,33 +10,15 @@ class AddFolder extends React.Component {
         }
     }
 
-    // postFolderRequest(folderId, callback) {
-    //     fetch(`http://localhost:9090/folders/`, { method: 'POST' })
-    //       .then(response => {
-    //         if (!response.ok) {
-    //           return response.json().then(error => {
-    //             throw error
-    //           })
-    //         }
-    //         return response.json()
-    //       })
-    //       .then(data => {
-    //         // callback(folderId)
-    //       })
-    //       .catch(error => {
-    //         console.log(error)
-    //       })
-    //   }
-
-
-    postFolderRequest(folderName) {
+    postFolderRequest = () => {
+        console.log()
         fetch(`http://localhost:9090/folders/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: folderName
+                name: this.state.folderName
             })
         })
             .then(response => {
