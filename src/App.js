@@ -2,10 +2,10 @@ import React from 'react';
 import './App.css';
 import NoteContainer from './note/NoteContainer'
 import FolderContainer from './folder/FolderContainer'
-import StoreData from './DummyStore'
 import { Link, Switch, Route, BrowserRouter as Router } from 'react-router-dom'
 import Context from './Context'
 import PropTypes from 'prop-types'
+import ErrorBoundary from './ErrorBoundary'
 
 class App extends React.Component {
 
@@ -124,6 +124,7 @@ class App extends React.Component {
     }
 
     return (
+      <ErrorBoundary>
       <Context.Provider value={contextValue}>
         <Router>
           <div className="App">
@@ -157,6 +158,7 @@ class App extends React.Component {
           </div>
         </Router>
       </Context.Provider>
+      </ErrorBoundary>
     );
 
   }
@@ -164,10 +166,7 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-    folders: PropTypes.array,
-    notes: PropTypes.array,
-    currentFolderId: PropTypes.string,
-    currentNoteContent: PropTypes.string
+    renderNoteNames: PropTypes.func
 }
 
 

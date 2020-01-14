@@ -2,7 +2,6 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import ValidationError from './ValidationError'
 import './App.css';
-import PropTypes from 'prop-types'
 
 class AddNote extends React.Component {
 
@@ -104,12 +103,6 @@ class AddNote extends React.Component {
             </div>
         )
     }
-}
-
-AddNote.prototype = {
-    showForm: PropTypes.bool,
-    noteName: PropTypes.string,
-    noteContent: PropTypes.string,
 }
 
 export default withRouter(AddNote);

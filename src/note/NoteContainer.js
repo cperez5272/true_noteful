@@ -2,7 +2,6 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import '../App.css'
 import Context from '../Context'
-import PropTypes from 'prop-types'
 
 class NoteContainer extends React.Component {
 
@@ -58,11 +57,6 @@ class NoteContainer extends React.Component {
             </div>
         )
     }
-}
-
-NoteContainer.prototype = {
-    foundNote: PropTypes.object,
-    folder: PropTypes.object,
 }
 
 export default withRouter(NoteContainer)

@@ -4,7 +4,6 @@ import '../App.css'
 import Context from '../Context'
 import AddNote from '../AddNote'
 import AddFolder from '../AddFolder'
-import ErrorBoundary from '../ErrorBoundary';
 
 class FolderContainer extends React.Component {
 
@@ -19,9 +18,7 @@ class FolderContainer extends React.Component {
                         id={folder.id}
                         className={folder.id === this.context.currentFolderId ? "active" : null}
                     >
-                        <ErrorBoundary>
                             {folder.name}
-                        </ErrorBoundary>
                     </li>
                 </Link>
             )
