@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import '../App.css'
 import Context from '../Context'
-import AddNote from '../AddNote'
-import AddFolder from '../AddFolder'
+import AddNote from '../note/AddNote'
+import AddFolder from './AddFolder'
 
 class FolderContainer extends React.Component {
 

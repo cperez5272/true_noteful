@@ -1,5 +1,5 @@
 import React from 'react'
-import ValidationError from './ValidationError'
+import ValidationError from '../ValidationError'
 
 class AddFolder extends React.Component {
     constructor() {
