@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ValidationError from './ValidationError'
 
 class AddFolder extends React.Component {
@@ -12,6 +12,7 @@ class AddFolder extends React.Component {
 
     postFolderRequest = () => {
         console.log()
+        window.location.reload();
         fetch(`http://localhost:9090/folders/`, {
             method: 'POST',
             headers: {

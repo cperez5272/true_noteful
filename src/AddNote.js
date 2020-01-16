@@ -12,6 +12,7 @@ class AddNote extends React.Component {
     }
 
     postNoteRequest = () => {
+        window.location.reload();
         const { noteName, noteContent, } = this.state;
         const d = new Date().toISOString();
         const obj = {
