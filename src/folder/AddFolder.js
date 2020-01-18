@@ -11,30 +11,24 @@ class AddFolder extends React.Component {
     }
 
     postFolderRequest = () => {
-        console.log()
         fetch(`http://localhost:9090/folders/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                name: this.state.folderName
-            })
+            body: JSON.stringify({name: this.state.folderName})
+        }).then(response => {
+            if (!response.ok) {
+                return response.json().then(error => {
+                    throw error
+                })
+            }
+            return response.json()
+        }).then(data => {
+            this.props.addFolder(data);
+        }).catch(error => {
+            console.log(error)
         })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(error => {
-                        throw error
-                    })
-                }
-                return response.json()
-            })
-            .then(data => {
-                // callback(folderId)
-            })
-            .catch(error => {
-                console.log(error)
-            })
     }
 
 
@@ -86,20 +80,6 @@ class AddFolder extends React.Component {
                 </form>
             </div>
         )
-    }
-
-    hiddenFolder = () => {
-        return (
-            <div>
-                <h2>Heeeey</h2>
-            </div>
-        )
-    }
-
-    surpiseFolder = () => {
-        if (this.state.showForm) {
-            return this.hiddenFolder()
-        }
     }
 
     surpiseForm = () => {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import ValidationError from '../ValidationError'
 import '../App.css';
 
@@ -27,19 +28,16 @@ class AddNote extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(obj)
-        })
-        .then(response => {
+        }).then(response => {
             if (!response.ok) {
                 return response.json().then(error => {
                     throw error
                 })
             }
             return response.json()
-        })
-        .then(data => {
-            // callback(folderId)
-        })
-        .catch(error => {
+        }).then(data => {
+            this.props.addNote(data);
+        }).catch(error => {
             console.log(error)
         })
     }
@@ -106,3 +104,9 @@ class AddNote extends React.Component {
 }
 
 export default withRouter(AddNote);
+
+AddNote.propTypes = {
+    noteName: PropTypes.string, 
+    noteContent: PropTypes.string, 
+    showForm: PropTypes.bool,
+};
