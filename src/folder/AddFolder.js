@@ -1,10 +1,5 @@
-<<<<<<< HEAD:src/AddFolder.js
-import React, { useState } from 'react'
-import ValidationError from './ValidationError'
-=======
 import React from 'react'
 import ValidationError from '../ValidationError'
->>>>>>> joe-branch:src/folder/AddFolder.js
 
 class AddFolder extends React.Component {
     constructor() {
@@ -14,13 +9,8 @@ class AddFolder extends React.Component {
             folderName: '',
         }
     }
-
+$
     postFolderRequest = () => {
-<<<<<<< HEAD:src/AddFolder.js
-        console.log()
-        window.location.reload();
-=======
->>>>>>> joe-branch:src/folder/AddFolder.js
         fetch(`http://localhost:9090/folders/`, {
             method: 'POST',
             headers: {
