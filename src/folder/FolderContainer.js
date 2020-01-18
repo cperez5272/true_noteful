@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import '../App.css'
 import Context from '../Context'
-import AddNote from '../AddNote'
-import AddFolder from '../AddFolder'
+import AddNote from '../note/AddNote'
+import AddFolder from './AddFolder'
 
 class FolderContainer extends React.Component {
 
@@ -26,7 +26,6 @@ class FolderContainer extends React.Component {
     }
 
 
-
     render() {
         return (
             <>
@@ -34,14 +33,14 @@ class FolderContainer extends React.Component {
                     <ul>
                         {this.renderFolderNames()}
                     </ul>
-                    <AddFolder />
+                    <AddFolder addFolder={this.props.addFolder}/>
                 </div>
 
                 <div className='note_list'>
                     <ul>
                         {this.props.renderNoteNames()}
                     </ul>
-                    <AddNote />
+                    <AddNote addNote={this.props.addNote}/>
                 </div>
             </>
         )

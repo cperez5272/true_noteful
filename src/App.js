@@ -69,7 +69,6 @@ class App extends React.Component {
 
   // what you see above and below give you the same results just in different ways.
 
-
   deleteNoteRequest(noteId, callback) {
     fetch(`http://localhost:9090/notes/${noteId}`, { method: 'DELETE' })
       .then(response => {
@@ -108,6 +107,14 @@ class App extends React.Component {
     }
   }
 
+  addFolder = (folder) => {
+    this.setState({folders: [...this.state.folders, folder]});
+  }
+
+  addNote = (note) => {
+    this.setState({notes: [...this.state.notes, note]});
+  }
+
   render() {
     const { folders, notes, currentFolderId } = this.state;
 
@@ -119,7 +126,6 @@ class App extends React.Component {
       folderClickHandler: this.folderClickHandler,
       renderNoteNames: this.renderNoteNames,
       removeNote: this.removeNote,
-
     }
 
     return (
@@ -139,6 +145,7 @@ class App extends React.Component {
                 folders={folders}
                 clickHandler={this.folderClickHandler}
                 renderNoteNames={this.renderNoteNames}
+                addFolder={this.addFolder}
               />}
               />
               <Route path='/folder/:folderId' render={() => <FolderContainer
@@ -146,6 +153,8 @@ class App extends React.Component {
                 clickHandler={this.folderClickHandler}
                 renderNoteNames={this.renderNoteNames}
                 currentFolderId={currentFolderId}
+                addFolder={this.addFolder}
+                addNote={this.addNote}
               />}
               />
               <Route path='/notes/:noteId' render={() => <NoteContainer

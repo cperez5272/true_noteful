@@ -1,5 +1,10 @@
+<<<<<<< HEAD:src/AddFolder.js
 import React, { useState } from 'react'
 import ValidationError from './ValidationError'
+=======
+import React from 'react'
+import ValidationError from '../ValidationError'
+>>>>>>> joe-branch:src/folder/AddFolder.js
 
 class AddFolder extends React.Component {
     constructor() {
@@ -11,31 +16,29 @@ class AddFolder extends React.Component {
     }
 
     postFolderRequest = () => {
+<<<<<<< HEAD:src/AddFolder.js
         console.log()
         window.location.reload();
+=======
+>>>>>>> joe-branch:src/folder/AddFolder.js
         fetch(`http://localhost:9090/folders/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                name: this.state.folderName
-            })
+            body: JSON.stringify({name: this.state.folderName})
+        }).then(response => {
+            if (!response.ok) {
+                return response.json().then(error => {
+                    throw error
+                })
+            }
+            return response.json()
+        }).then(data => {
+            this.props.addFolder(data);
+        }).catch(error => {
+            console.log(error)
         })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(error => {
-                        throw error
-                    })
-                }
-                return response.json()
-            })
-            .then(data => {
-                // callback(folderId)
-            })
-            .catch(error => {
-                console.log(error)
-            })
     }
 
 
@@ -87,20 +90,6 @@ class AddFolder extends React.Component {
                 </form>
             </div>
         )
-    }
-
-    hiddenFolder = () => {
-        return (
-            <div>
-                <h2>Heeeey</h2>
-            </div>
-        )
-    }
-
-    surpiseFolder = () => {
-        if (this.state.showForm) {
-            return this.hiddenFolder()
-        }
     }
 
     surpiseForm = () => {
