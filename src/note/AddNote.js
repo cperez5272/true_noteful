@@ -64,12 +64,26 @@ class AddNote extends React.Component {
 
     validateNewNote() {
         const name = this.state.noteName.trim();
+        const info = this.state.noteContent.trim()
         if (name.length === 0) {
             return 'Name is required';
         } else if (name.length < 3) {
             return 'Name must be at least 3 characters long';
+        } else if (info.length === 0) {
+            return 'Please provide info'
+        } else if (info.length < 3) {
+            return 'Your info should be at least 3 characters long'
         }
     }
+
+    // validateNoteDescription() {
+    //     const name = this.state.noteContent.trim()
+    //     if (name.length === 0) {
+    //         return 'Please provide info'
+    //     }else if (name.length < 3) {
+    //         return 'You info should be at least 3 characters long'
+    //     }
+    // }
 
     handleFormSubmit = (event) => {
         event.preventDefault()
@@ -86,7 +100,7 @@ class AddNote extends React.Component {
                         <input type='text' name='noteName' value={this.state.noteName} onChange={this.updateNote}/>
                         {this.state.showForm && (<ValidationError message={this.validateNewNote()}/>)}
                         <textarea type='text' name='noteContent' value={this.state.noteContent} onChange={this.updateNote}/>
-                        <button type='submit' onClick={() => this.postNoteRequest(this.addNote)}>Click</button>
+                        <button disabled={this.validateNewNote()} type='submit' onClick={() => this.postNoteRequest(this.addNote)}>Click</button>
                     </div>
                 </form>
             </div>
