@@ -74,16 +74,28 @@ class AddNote extends React.Component {
         } else if (info.length < 3) {
             return 'Your info should be at least 3 characters long'
         }
+
+        // <label>Pick a folder</label>
+        // <select>
+        //     <option>Fight</option>
+        //     <option>Run</option>
+        //     <option>Pay</option>
+        // </select>
     }
 
-    // validateNoteDescription() {
-    //     const name = this.state.noteContent.trim()
-    //     if (name.length === 0) {
-    //         return 'Please provide info'
-    //     }else if (name.length < 3) {
-    //         return 'You info should be at least 3 characters long'
-    //     }
-    // }
+    pathToFolder = () => {
+        
+        return (
+            <div>
+                <label>Pick a folder</label>
+                <select>
+                    <option>Fight</option>
+                    <option>Run</option>
+                    <option>Pay</option>
+                </select>
+            </div>
+        )
+    }
 
     handleFormSubmit = (event) => {
         event.preventDefault()
