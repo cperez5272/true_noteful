@@ -3,8 +3,11 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ValidationError from '../ValidationError'
 import '../App.css';
+import Context from '../Context'
 
 class AddNote extends React.Component {
+
+    static contextType = Context
 
     state = {
         showForm: false,
@@ -84,15 +87,19 @@ class AddNote extends React.Component {
     }
 
     pathToFolder = () => {
-        
         return (
             <div>
                 <label>Pick a folder</label>
-                <select>
-                    <option>Fight</option>
-                    <option>Run</option>
-                    <option>Pay</option>
-                </select>
+                    {this.context.folders.map(folder => {
+                        console.log(folder)
+                        return(
+                            <select>
+                            
+                                <option>{folder.name}</option>
+                            
+                            </select>
+                        )
+                    })}
             </div>
         )
     }
@@ -113,6 +120,7 @@ class AddNote extends React.Component {
                         {this.state.showForm && (<ValidationError message={this.validateNewNote()}/>)}
                         <textarea type='text' name='noteContent' value={this.state.noteContent} onChange={this.updateNote}/>
                         <button disabled={this.validateNewNote()} type='submit' onClick={() => this.postNoteRequest(this.addNote)}>Click</button>
+                        {this.pathToFolder()}
                     </div>
                 </form>
             </div>
