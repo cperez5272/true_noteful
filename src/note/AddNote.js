@@ -90,16 +90,14 @@ class AddNote extends React.Component {
         return (
             <div>
                 <label>Pick a folder</label>
+                <select>
                     {this.context.folders.map(folder => {
                         console.log(folder)
-                        return(
-                            <select>
-                            
-                                <option>{folder.name}</option>
-                            
-                            </select>
+                        return(      
+                            <option key={folder.id}>{folder.name}</option>
                         )
                     })}
+                </select>
             </div>
         )
     }
