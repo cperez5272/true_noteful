@@ -13,6 +13,7 @@ class AddNote extends React.Component {
         showForm: false,
         noteName: '',
         noteContent: '',
+        value: ''
     }
 
     postNoteRequest = () => {
@@ -22,7 +23,7 @@ class AddNote extends React.Component {
             name: noteName, 
             content: noteContent, 
             modified: d, 
-            folderId: this.props.match.params.folderId
+            folderId: this.state.value
         }
         console.log(obj);
         fetch(`http://localhost:9090/notes/`, {
@@ -86,15 +87,19 @@ class AddNote extends React.Component {
         // </select>
     }
 
+    changeHandler = (event) => {
+        this.setState({value: event.target.value})
+    }
+
     pathToFolder = () => {
         return (
             <div>
                 <label>Pick a folder</label>
-                <select value={this.state.noteContent} onChange= {this.postNoteRequest}>
+                <select value={this.state.value} onChange={this.changeHandler}>
                     {this.context.folders.map(folder => {
                         console.log(folder)
                         return(      
-                            <option key={folder.id}>{folder.name}</option>
+                            <option key={folder.id} value={folder.id}>{folder.name}</option>
                         )
                     })}
                 </select>
