@@ -90,7 +90,7 @@ class AddNote extends React.Component {
         return (
             <div>
                 <label>Pick a folder</label>
-                <select>
+                <select value={this.state.noteContent} onChange= {this.postNoteRequest}>
                     {this.context.folders.map(folder => {
                         console.log(folder)
                         return(      
