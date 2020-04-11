@@ -27,7 +27,7 @@ class NoteContainer extends React.Component {
     // }
 
     deleteNoteRequest(noteId, callback) {
-        fetch(`http://localhost:9090/notes/${noteId}`, {method: 'DELETE'})
+        fetch(`${process.env.REACT_APP_NOTEFUL_API}/notes/${noteId}`, {method: 'DELETE'})
             .then(response => {
                 if(!response.ok) {
                     return response.json().then(error => {
@@ -46,25 +46,18 @@ class NoteContainer extends React.Component {
     }
 
     render() {
-
-        findNote = () => {
-            const foundNote = this.context.notes.find(note => note.id === this.props.match.params.noteId);
-            return foundNote
-           }
-
         const foundNote = this.context.notes.find(note => note.id === this.props.match.params.noteId);
-        const foundFolder = this.context.folders.find(folder => folder.id === foundNote.folderId);
         const note = this.context.notes.find(note => note.id === this.props.match.params.noteId)
         
-        return (
-            <div>
-                {this.state.folder.name}
-                {this.state.foundNote.name}
-                {this.state.foundNote.content}
-                <button onClick={() => this.props.history.go(-1)}>Go back </button>
-                <button onClick={() => this.deleteNoteRequest(note.id, this.context.removeNote)}>Delete</button>
-            </div>
-        )
+        if (note == undefined) {
+            return (<div>Note not found</div>)
+        }
+
+        const foundFolder = this.context.folders.find(folder => folder.id === foundNote.folderId);
+
+        if (foundFolder === undefined) {
+            return (<div>Note not found</div>)
+        }
     }
 }
 

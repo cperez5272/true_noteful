@@ -27,6 +27,7 @@ class FolderContainer extends React.Component {
 
 
     render() {
+        console.log(this.props.renderNoteNames());
         return (
             <>
                 <div className='folder_list'>

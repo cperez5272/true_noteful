@@ -23,10 +23,10 @@ class AddNote extends React.Component {
             name: noteName, 
             content: noteContent, 
             modified: d, 
-            folderId: this.state.value
+            folder_id: this.state.value
         }
         console.log(obj);
-        fetch(`http://localhost:9090/notes/`, {
+        fetch(`${process.env.REACT_APP_NOTEFUL_API}/notes/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ class AddNote extends React.Component {
                 <label>Pick a folder</label>
                 <select value={this.state.value} onChange={this.changeHandler}>
                     {this.context.folders.map(folder => {
-                        console.log(folder)
+                        // console.log(folder)
                         return(      
                             <option key={folder.id} value={folder.id}>{folder.name}</option>
                         )

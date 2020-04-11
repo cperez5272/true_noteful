@@ -11,7 +11,7 @@ class AddFolder extends React.Component {
     }
 $
     postFolderRequest = () => {
-        fetch(`http://localhost:9090/folders/`, {
+        fetch(`${process.env.REACT_APP_NOTEFUL_API}/folders/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

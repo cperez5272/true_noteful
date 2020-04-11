@@ -17,7 +17,7 @@ class App extends React.Component {
   }
 
   componentDidMount = () => {
-    fetch(`http://localhost:8000/api/folders`)
+    fetch(`${process.env.REACT_APP_NOTEFUL_API}/folders`)
       .then((response) => {
         return response.json()
       })
@@ -30,7 +30,7 @@ class App extends React.Component {
   }
 
   fetchNotes = () => {
-    fetch(`http://localhost:8000/api/notes`)
+    fetch(`${process.env.REACT_APP_NOTEFUL_API}/notes`)
       .then((response) => {
         return response.json()
       })
@@ -55,8 +55,9 @@ class App extends React.Component {
   }
 
   filterNotes = () => {
-    const match = this.state.notes.filter(note => note.folderId === this.state.currentFolderId)
-    return match
+    console.log(this.state.notes);
+    const match = this.state.notes.filter(note => note.folder_id === this.state.currentFolderId)
+    return match;
   }
 
   removeNote = (noteId) => {
@@ -70,7 +71,7 @@ class App extends React.Component {
   // what you see above and below give you the same results just in different ways.
 
   deleteNoteRequest(noteId, callback) {
-    fetch(`http://localhost:9090/notes/${noteId}`, { method: 'DELETE' })
+    fetch(`${process.env.REACT_APP_NOTEFUL_API}/notes/${noteId}`, { method: 'DELETE' })
       .then(response => {
         if (!response.ok) {
           return response.json().then(error => {
@@ -90,7 +91,11 @@ class App extends React.Component {
   renderNoteNames = () => {
     const noteDataTransform = (note) => {
       return (
-        <li key={note.id} onClick={() => this.noteClickHandler(note.content)} content={note.content}>
+        <li 
+          key={note.id} 
+          onClick={() => this.noteClickHandler(note.content)} 
+          content={note.content}
+        >
           <Link to={`/notes/${note.id}`}>
             {note.name}
           </Link>
