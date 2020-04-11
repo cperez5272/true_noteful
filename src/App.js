@@ -17,7 +17,7 @@ class App extends React.Component {
   }
 
   componentDidMount = () => {
-    fetch(`http://localhost:9090/folders`)
+    fetch(`http://localhost:8000/api/folders`)
       .then((response) => {
         return response.json()
       })
@@ -30,7 +30,7 @@ class App extends React.Component {
   }
 
   fetchNotes = () => {
-    fetch(`http://localhost:9090/notes`)
+    fetch(`http://localhost:8000/api/notes`)
       .then((response) => {
         return response.json()
       })
