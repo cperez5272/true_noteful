@@ -14,7 +14,7 @@ class FolderContainer extends React.Component {
             return (
                 <Link to={`/folder/${folder.id}`} key={folder.id}>
                     <li
-                        onClick={this.context.folderClickHandler}
+                        onClick={() => this.context.folderClickHandler(folder.id)}
                         id={folder.id}
                         className={folder.id === this.context.currentFolderId ? "active" : null}
                     >

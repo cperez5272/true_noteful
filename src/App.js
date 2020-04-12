@@ -12,7 +12,7 @@ class App extends React.Component {
   state = {
     folders: [],
     notes: [],
-    currentFolderId: '',
+    currentFolderId: 2,
     currentNoteContent: '',
   }
 
@@ -42,11 +42,10 @@ class App extends React.Component {
       })
   }
 
-  folderClickHandler = (event) => {
-    this.setState({
-      currentFolderId: event.target.id,
-    })
+  folderClickHandler = (id) => {
+    this.setState({ currentFolderId: id })
   }
+  
 
   noteClickHandler = (content) => {
     this.setState({
@@ -55,9 +54,13 @@ class App extends React.Component {
   }
 
   filterNotes = () => {
-    console.log(this.state.notes);
-    const match = this.state.notes.filter(note => note.folder_id === this.state.currentFolderId)
-    return match;
+    // console.log(this.state.notes);
+    const match = this.state.notes.filter(note =>{
+      // console.log("FOLDER ID:", this.state.currentFolderId);
+      return note.folder_id === this.state.currentFolderId;
+    })
+    console.log(match)
+    return match
   }
 
   removeNote = (noteId) => {
@@ -141,7 +144,7 @@ class App extends React.Component {
 
             <Link to='/'>
               <header>
-                <h1 onClick={() => this.setState({ currentFolderId: '' })}>Noteful</h1>
+                <h1 onClick={() => this.setState({ currentFolderId: 0 })}>Noteful</h1>
               </header>
             </Link>
 
