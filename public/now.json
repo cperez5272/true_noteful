@@ -1,0 +1,8 @@
+{
+    "version": 2,
+    "name": "[cperez5272]-true-noteful",
+    "routes": [
+        { "handle": "filesystem" },
+        { "src": "/.*", "dest": "/index.html" }
+    ]
+  }
