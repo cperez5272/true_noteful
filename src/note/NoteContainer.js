@@ -8,23 +8,8 @@ class NoteContainer extends React.Component {
     static contextType = Context
 
     state = {
-        // foundNote: {},
         folder: {}
     }
-
-    // findNote = () => {
-    //  const foundNote = this.context.notes.find(note => note.id === this.props.match.params.noteId);
-    //  return foundNote
-    // }
-
-    // componentDidMount() {
-    //     const foundNote = this.context.notes.find(note => note.id === this.props.match.params.noteId);
-    //     const foundFolder = this.context.folders.find(folder => folder.id === foundNote.folderId);
-    //     this.setState({ foundNote: foundNote, folder: foundFolder });
-    //     console.log(foundFolder);
-
-    //     return foundNote === undefined ? this.props.history.push("/") : null;
-    // }
 
     deleteNoteRequest(noteId, callback) {
         fetch(`${process.env.REACT_APP_NOTEFUL_API}/notes/${noteId}`, {method: 'DELETE'})
@@ -49,7 +34,7 @@ class NoteContainer extends React.Component {
         const foundNote = this.context.notes.find(note => note.id === this.props.match.params.noteId);
         const note = this.context.notes.find(note => note.id === this.props.match.params.noteId)
         
-        if (note == undefined) {
+        if (note === undefined) {
             return (<div>Note not found</div>)
         }
 

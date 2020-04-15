@@ -75,20 +75,17 @@ class App extends React.Component {
 
   deleteNoteRequest(noteId, callback) {
     fetch(`${process.env.REACT_APP_NOTEFUL_API}/notes/${noteId}`, { method: 'DELETE' })
-      .then(response => {
-        if (!response.ok) {
+    .then(response => {
+      if (!response.ok) {
           return response.json().then(error => {
-            throw error
-          })
-        }
-        return response.json()
-      })
-      .then(data => {
-        callback(noteId)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+              throw error
+          });
+      }
+      callback(noteId); // just run this on success, instead of calling response.json()
+  })
+  .catch(error => {
+      console.log(error);
+  });
   }
 
   renderNoteNames = () => {
