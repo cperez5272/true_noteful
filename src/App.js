@@ -116,7 +116,7 @@ class App extends React.Component {
     this.setState({folders: [...this.state.folders, folder]});
   }
 
-  addNote = (note) => {
+  addNewNote = (note) => {
     this.setState({notes: [...this.state.notes, note]});
   }
 
@@ -146,26 +146,43 @@ class App extends React.Component {
             </Link>
 
             <Switch>
-              <Route exact path="/" render={() => <FolderContainer
-                folders={folders}
-                clickHandler={this.folderClickHandler}
-                renderNoteNames={this.renderNoteNames}
-                addFolder={this.addFolder}
-              />}
+              <Route 
+                exact 
+                path="/" 
+                render={() => 
+                  <FolderContainer
+                    folders={folders}
+                    clickHandler={this.folderClickHandler}
+                    renderNoteNames={this.renderNoteNames}
+                    addFolder={this.addFolder}
+                    addNewNote={this.addNewNote}
+                  />
+                }
               />
-              <Route path='/folder/:folderId' render={() => <FolderContainer
-                folders={folders}
-                clickHandler={this.folderClickHandler}
-                renderNoteNames={this.renderNoteNames}
-                currentFolderId={currentFolderId}
-                addFolder={this.addFolder}
-                addNote={this.addNote}
-              />}
+
+              <Route 
+                path='/folder/:folderId' 
+                render={() => 
+                  <FolderContainer
+                    folders={folders}
+                    clickHandler={this.folderClickHandler}
+                    renderNoteNames={this.renderNoteNames}
+                    currentFolderId={currentFolderId}
+                    addFolder={this.addFolder}
+                    addNewNote={this.addNewNote}
+                  />
+                }
               />
-              <Route path='/notes/:noteId' render={() => <NoteContainer
-                notes={notes}
-                folders={folders}
-              />}
+
+              <Route 
+                path='/notes/:noteId' 
+                render={() => 
+                  <NoteContainer
+                    notes={this.state.notes}
+                    folders={this.state.folders}
+                    addNewNote={this.addNewNote}
+                  />
+                }
               />
             </Switch>
           </div>

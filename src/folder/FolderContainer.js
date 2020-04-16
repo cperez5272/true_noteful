@@ -27,7 +27,6 @@ class FolderContainer extends React.Component {
 
 
     render() {
-        console.log(this.props.renderNoteNames());
         return (
             <>
                 <div className='folder_list'>
@@ -41,7 +40,7 @@ class FolderContainer extends React.Component {
                     <ul>
                         {this.props.renderNoteNames()}
                     </ul>
-                    <AddNote addNote={this.props.addNote}/>
+                    <AddNote addNewNote={this.props.addNewNote}/>
                 </div>
             </>
         )

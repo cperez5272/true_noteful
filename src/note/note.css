@@ -1,0 +1,16 @@
+button {
+    width: 100px; 
+    height: 40px; 
+  }
+  
+  button:hover {
+    cursor: pointer; 
+  }
+  
+  form {
+    display: flex;
+    justify-content: center; 
+    min-width: 250px; 
+    flex-direction: column; 
+    
+  }
