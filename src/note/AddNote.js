@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ValidationError from '../ValidationError'
 import '../App.css';
+import './note.css';
 import Context from '../Context'
 
 class AddNote extends React.Component {
@@ -13,46 +14,41 @@ class AddNote extends React.Component {
         showForm: false,
         noteName: '',
         noteContent: '',
-        value: ''
+        folderIdValue: 1
     }
 
-    postNoteRequest = () => {
-        const { noteName, noteContent, } = this.state;
-        const d = new Date().toISOString();
-        const obj = {
-            name: noteName, 
-            content: noteContent, 
-            modified: d, 
-            folder_id: this.state.value
-        }
-        console.log(obj);
-        fetch(`${process.env.REACT_APP_NOTEFUL_API}/notes/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(obj)
-        }).then(response => {
-            if (!response.ok) {
-                return response.json().then(error => {
-                    throw error
-                })
+    postNoteRequest = async () => {
+        try {
+            const { noteName, noteContent, } = this.state;
+            const folderValue = this.state.folderIdValue
+            const d = new Date().toISOString();
+            const obj = {
+                name: noteName, 
+                content: noteContent, 
+                modified: d, 
+                folder_id: folderValue
             }
-            return response.json()
-        }).then(data => {
-            this.props.addNote(data);
-        }).catch(error => {
-            console.log(error)
-        })
+            console.log(obj);
+            const response = await fetch(`${process.env.REACT_APP_NOTEFUL_API}/notes/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(obj)
+            })
+            const json = await response.json();
+            this.props.addNewNote(json);
+            this.setState({
+                noteName: "", 
+                noteContent: "", 
+                folderIdValue: ""
+            })
+            console.log(json);
+        } catch (error) {
+            console.log(error);
+        }
     }
-
-      addNote = (noteId) => {
-        const newNotes = this.state.folderName.spread(note => note.id !== noteId)
-        this.setState({
-          noteName: newNotes
-        })
-        console.log('click!')
-      }
+    
 
     renderForm = () => {
         this.setState ({
@@ -78,28 +74,25 @@ class AddNote extends React.Component {
         } else if (info.length < 3) {
             return 'Your info should be at least 3 characters long'
         }
-
-        // <label>Pick a folder</label>
-        // <select>
-        //     <option>Fight</option>
-        //     <option>Run</option>
-        //     <option>Pay</option>
-        // </select>
     }
 
     changeHandler = (event) => {
-        this.setState({value: event.target.value})
+        this.setState({folderIdValue: parseInt(event.target.value)});
     }
 
     pathToFolder = () => {
         return (
             <div>
                 <label>Pick a folder</label>
-                <select value={this.state.value} onChange={this.changeHandler}>
+                <select value={this.state.folderIdValue} onChange={this.changeHandler}>
                     {this.context.folders.map(folder => {
-                        // console.log(folder)
                         return(      
-                            <option key={folder.id} value={folder.id}>{folder.name}</option>
+                            <option
+                                key={folder.id} 
+                                value={folder.id}
+                            >
+                                {folder.name}
+                            </option>
                         )
                     })}
                 </select>
@@ -114,7 +107,7 @@ class AddNote extends React.Component {
 
     noteForm = () => {
         return(
-            <div>
+            <>
                 <form onSubmit = {event => this.handleFormSubmit(event)}>
                     <h2>Note Form</h2>
                     <div>
@@ -122,11 +115,11 @@ class AddNote extends React.Component {
                         <input type='text' name='noteName' value={this.state.noteName} onChange={this.updateNote}/>
                         {this.state.showForm && (<ValidationError message={this.validateNewNote()}/>)}
                         <textarea type='text' name='noteContent' value={this.state.noteContent} onChange={this.updateNote}/>
-                        <button disabled={this.validateNewNote()} type='submit' onClick={() => this.postNoteRequest(this.addNote)}>Click</button>
+                        <button disabled={this.validateNewNote()} type='submit' onClick={this.postNoteRequest}>Click</button>
                         {this.pathToFolder()}
                     </div>
                 </form>
-            </div>
+            </>
         )
     }
 

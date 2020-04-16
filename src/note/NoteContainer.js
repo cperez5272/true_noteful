@@ -8,7 +8,24 @@ class NoteContainer extends React.Component {
     static contextType = Context
 
     state = {
-        folder: {}
+        folder: {}, 
+        note: {}
+    }
+
+    componentDidMount() {
+        const noteId = this.props.match.params.noteId;
+        const foundNote = this.props.notes.find(note => parseInt(note.id) === parseInt(noteId));
+        if (foundNote) {
+            this.setState({note: foundNote});
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.notes !== this.props.notes) {
+            const noteId = this.props.match.params.noteId;
+            const foundNote = this.props.notes.find(note => parseInt(note.id) === parseInt(noteId));
+            this.setState({note: foundNote});
+        }    
     }
 
     deleteNoteRequest(noteId, callback) {
@@ -30,19 +47,16 @@ class NoteContainer extends React.Component {
             })
     }
 
-    render() {
-        const foundNote = this.context.notes.find(note => note.id === this.props.match.params.noteId);
-        const note = this.context.notes.find(note => note.id === this.props.match.params.noteId)
-        
-        if (note === undefined) {
-            return (<div>Note not found</div>)
-        }
 
-        const foundFolder = this.context.folders.find(folder => folder.id === foundNote.folderId);
-
-        if (foundFolder === undefined) {
-            return (<div>Note not found</div>)
-        }
+    render() {  
+        console.log(this.state.note);
+        if (!this.state.note.name) return <></>
+        return (
+            <>
+                <p> { this.state.note.name} </p>
+                <p> {this.state.note.content} </p>
+            </>
+        )
     }
 }
 
