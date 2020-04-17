@@ -37,14 +37,20 @@ class FolderContainer extends React.Component {
                 </div>
 
                 <div className='note_list'>
-                    <ul>
-                        {this.props.renderNoteNames()}
-                    </ul>
-                    <AddNote addNewNote={this.props.addNewNote}/>
+                    {this.props.renderNoteNames()}
                 </div>
+                <AddNote addNewNote={this.props.addNewNote}/>
             </>
         )
     }
 }
 
-export default FolderContainer
+export default FolderContainer;
+
+FolderContainer.defaultProps = {
+    folders: [], 
+    clickHandler: () => {}, 
+    renderNoteNames: () => {}, 
+    addFolder: () => {}, 
+    addNewNote: () => {}
+}

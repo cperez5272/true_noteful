@@ -5,7 +5,9 @@ import FolderContainer from './folder/FolderContainer'
 import { Link, Switch, Route, BrowserRouter as Router } from 'react-router-dom'
 import Context from './Context'
 import PropTypes from 'prop-types'
-import ErrorBoundary from './ErrorBoundary'
+import ErrorBoundary from './ErrorBoundary';
+import HomeContainer from './HomeContainer';
+import NoteInstance from './note/NoteInstance';
 
 class App extends React.Component {
 
@@ -14,6 +16,7 @@ class App extends React.Component {
     notes: [],
     currentFolderId: 2,
     currentNoteContent: '',
+    index: 0
   }
 
   componentDidMount = () => {
@@ -29,13 +32,18 @@ class App extends React.Component {
     this.fetchNotes()
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.index !== this.state.index) {
+      this.fetchNotes();
+    }
+  }
+
   fetchNotes = () => {
     fetch(`${process.env.REACT_APP_NOTEFUL_API}/notes`)
       .then((response) => {
         return response.json()
       })
       .then((data) => {
-        console.log(data)
         this.setState({
           notes: data
         })
@@ -46,7 +54,6 @@ class App extends React.Component {
     this.setState({ currentFolderId: id })
   }
   
-
   noteClickHandler = (content) => {
     this.setState({
       currentNoteContent: content
@@ -54,12 +61,9 @@ class App extends React.Component {
   }
 
   filterNotes = () => {
-    // console.log(this.state.notes);
     const match = this.state.notes.filter(note =>{
-      // console.log("FOLDER ID:", this.state.currentFolderId);
       return note.folder_id === this.state.currentFolderId;
     })
-    console.log(match)
     return match
   }
 
@@ -68,47 +72,16 @@ class App extends React.Component {
     this.setState({
       notes: newNotes
     })
-    console.log('click!')
   }
 
   // what you see above and below give you the same results just in different ways.
 
-  deleteNoteRequest(noteId, callback) {
-    fetch(`${process.env.REACT_APP_NOTEFUL_API}/notes/${noteId}`, { method: 'DELETE' })
-    .then(response => {
-      if (!response.ok) {
-          return response.json().then(error => {
-              throw error
-          });
-      }
-      callback(noteId); // just run this on success, instead of calling response.json()
-  })
-  .catch(error => {
-      console.log(error);
-  });
-  }
-
   renderNoteNames = () => {
-    const noteDataTransform = (note) => {
-      return (
-        <li 
-          key={note.id} 
-          onClick={() => this.noteClickHandler(note.content)} 
-          content={note.content}
-        >
-          <Link to={`/notes/${note.id}`}>
-            {note.name}
-          </Link>
-          {note.modified} <br />
-          <button onClick={() => this.deleteNoteRequest(note.id, this.removeNote)}>Delete</button>
-        </li>
-      )
-    }
     if (this.state.currentFolderId === '') {
-      return this.state.notes.map(noteDataTransform)
+      return this.state.notes.map(note => <NoteInstance key={note.id} note={note} deleteNoteRequest={this.deleteNoteRequest}/>)
     } else {
       const filteredNotes = this.filterNotes();
-      return filteredNotes.map(noteDataTransform)
+      return filteredNotes.map(note => <NoteInstance key={note.id} note={note} deleteNoteRequest={this.deleteNoteRequest}/>)
     }
   }
 
@@ -119,6 +92,8 @@ class App extends React.Component {
   addNewNote = (note) => {
     this.setState({notes: [...this.state.notes, note]});
   }
+
+  updateIndex = () => this.setState({index: this.state.index + 1});
 
   render() {
     const { folders, notes, currentFolderId } = this.state;
@@ -150,12 +125,13 @@ class App extends React.Component {
                 exact 
                 path="/" 
                 render={() => 
-                  <FolderContainer
+                  <HomeContainer
                     folders={folders}
                     clickHandler={this.folderClickHandler}
                     renderNoteNames={this.renderNoteNames}
                     addFolder={this.addFolder}
                     addNewNote={this.addNewNote}
+                    notes={this.state.notes}
                   />
                 }
               />
@@ -181,6 +157,7 @@ class App extends React.Component {
                     notes={this.state.notes}
                     folders={this.state.folders}
                     addNewNote={this.addNewNote}
+                    updateIndex={this.updateIndex}
                   />
                 }
               />

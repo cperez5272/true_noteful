@@ -28,36 +28,28 @@ class NoteContainer extends React.Component {
         }    
     }
 
-    deleteNoteRequest(noteId, callback) {
-        fetch(`${process.env.REACT_APP_NOTEFUL_API}/notes/${noteId}`, {method: 'DELETE'})
-            .then(response => {
-                if(!response.ok) {
-                    return response.json().then(error => {
-                        throw error
-                    })
-                }
-                return response.json()
-            })
-            .then(data => {
-                callback(noteId)
-            })
-            .then(this.props.history.push('/'))
-            .catch(error => {
-                console.log(error)
-            })
+    deleteNoteRequest = async (callback) => {
+        const noteId = this.props.match.params.noteId; 
+        const response = await fetch(`${process.env.REACT_APP_NOTEFUL_API}/notes/${noteId}`, {method: 'DELETE'}); 
+        console.log(response);
+        this.props.updateIndex();
+        return this.props.history.push("/");
     }
 
 
     render() {  
-        console.log(this.state.note);
+
         if (!this.state.note.name) return <></>
         return (
             <>
                 <p> { this.state.note.name} </p>
-                <p> {this.state.note.content} </p>
+                <p> {this.state.note.content } </p>
+                <p> { this.state.note.modified } </p>
+                <button onClick={this.deleteNoteRequest}> DELETE </button>
             </>
         )
     }
 }
 
-export default withRouter(NoteContainer)
+export default withRouter(NoteContainer); 
+

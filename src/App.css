@@ -33,17 +33,10 @@ header {
   width: 35%;
   margin-top: -15px;
 }
-.note_list li {
-  list-style-type: none;
-  border: 1px black solid
-}
-.note_list ul {
-  background-color: lightcoral;
-  width: 100%;
-  border-style: solid;
-  border-width: 1px;
-  list-style-type: none;
-  padding: 0;
+.note-instance {
+  background-color: skyblue; 
+  border: 1px solid white; 
+  /* max-width: 200px; */
 }
 .active {
   background-color: green;

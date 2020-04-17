@@ -63,7 +63,6 @@ $
 
     handleFormSubmit = (event) => {
         event.preventDefault()
-        console.log('Name: ', this.state.folderName)
     }
 
     hiddenForm = () => {
