@@ -5,6 +5,17 @@ import ValidationError from '../ValidationError'
 import '../App.css';
 import './note.css';
 import Context from '../Context'
+import {
+    AddNoteButtonContainer, 
+    Button, 
+    FormContainer, 
+    LabelContainer, 
+    Input, 
+    TextArea, 
+    CloseButton, 
+    CustomButton, 
+    Select
+    } from '../styled-components.js'
 
 class AddNote extends React.Component {
 
@@ -14,13 +25,17 @@ class AddNote extends React.Component {
         showForm: false,
         noteName: '',
         noteContent: '',
-        folderIdValue: 1
+        folderIdValue: 1, 
+        validationErrorInfo: ''
     }
 
     postNoteRequest = async () => {
         try {
-            const { noteName, noteContent, } = this.state;
+            const { noteName, noteContent, validationErrorInfo } = this.state;
             const folderValue = this.state.folderIdValue
+            if (validationErrorInfo !== '') {
+                return; 
+            } 
             const d = new Date().toISOString();
             const obj = {
                 name: noteName, 
@@ -28,7 +43,6 @@ class AddNote extends React.Component {
                 modified: d, 
                 folder_id: folderValue
             }
-            console.log(obj);
             const response = await fetch(`${process.env.REACT_APP_NOTEFUL_API}/notes/`, {
                 method: 'POST',
                 headers: {
@@ -48,9 +62,9 @@ class AddNote extends React.Component {
             console.log(error);
         }
     }
-    
 
     renderForm = () => {
+        console.log(`%c ${this.state.showForm}`, 'background-color: green; color: white;');
         this.setState ({
             showForm: !this.state.showForm
         })
@@ -62,29 +76,44 @@ class AddNote extends React.Component {
         })
     }
 
+    setValidationErrors (value) {
+        this.setState({validationErrorInfo: value});
+    }
+
+    clearError = () => this.setState({validationErrorInfo: ""});
+
     validateNewNote() {
         const name = this.state.noteName.trim();
-        const info = this.state.noteContent.trim()
+        const info = this.state.noteContent.trim(); 
         if (name.length === 0) {
-            return 'Name is required';
-        } else if (name.length < 3) {
-            return 'Name must be at least 3 characters long';
+            return this.setValidationErrors('Name is required');
+        } else if (name.length < 3 || name.length > 20) {
+            return this.setValidationErrors('Name must be between 3 and 20 characters long');
         } else if (info.length === 0) {
-            return 'Please provide info'
+            return this.setValidationErrors('Please provide info');
         } else if (info.length < 3) {
-            return 'Your info should be at least 3 characters long'
+            return this.setValidationErrors('Your info should be at least 3 characters long');
         }
+        return true;
     }
 
     changeHandler = (event) => {
         this.setState({folderIdValue: parseInt(event.target.value)});
     }
 
+    clickHandler = () => {
+        const isValid = this.validateNewNote(); 
+        if (isValid === true) {
+            this.postNoteRequest();
+            this.renderForm(); 
+        }
+    }
+
     pathToFolder = () => {
         return (
             <div>
                 <label>Pick a folder</label>
-                <select value={this.state.folderIdValue} onChange={this.changeHandler}>
+                <Select value={this.state.folderIdValue} onChange={this.changeHandler}>
                     {this.context.folders.map(folder => {
                         return(      
                             <option
@@ -95,40 +124,50 @@ class AddNote extends React.Component {
                             </option>
                         )
                     })}
-                </select>
+                </Select>
             </div>
         )
     }
 
     handleFormSubmit = (event) => {
         event.preventDefault()
-        console.log('Name: ', this.state.noteName)
     }
 
     noteForm = () => {
         return(
             <>
-                <form onSubmit = {event => this.handleFormSubmit(event)}>
-                    <h2>Note Form</h2>
-                    <div>
+                <FormContainer onSubmit = {event => this.handleFormSubmit(event)}>
+                    <LabelContainer>
+                        <CloseButton onClick={this.renderForm}> X </CloseButton>
+                        <h2 style={{textAlign: 'center', marginBottom: '20px', width: '100%'}}>Note Form</h2>
                         <label>Name:</label>
-                        <input type='text' name='noteName' value={this.state.noteName} onChange={this.updateNote}/>
-                        {this.state.showForm && (<ValidationError message={this.validateNewNote()}/>)}
-                        <textarea type='text' name='noteContent' value={this.state.noteContent} onChange={this.updateNote}/>
-                        <button disabled={this.validateNewNote()} type='submit' onClick={this.postNoteRequest}>Click</button>
+                        <Input type='text' name='noteName' value={this.state.noteName} onChange={this.updateNote}/>
+                        <TextArea type='text' name='noteContent' value={this.state.noteContent} onChange={this.updateNote}/>
+                        <CustomButton type='submit' onClick={this.clickHandler}> ADD NOTE </CustomButton>
                         {this.pathToFolder()}
-                    </div>
-                </form>
+
+
+                    { this.state.validationErrorInfo !== "" && 
+                        <ValidationError 
+                            validationErrorInfo={this.state.validationErrorInfo}
+                            clearError={this.clearError}
+                        />
+                    }
+
+                    </LabelContainer>
+                </FormContainer>
             </>
         )
     }
 
     render() {
         return (
-            <div className="add-note-form">
-                <button onClick={this.renderForm}> {!this.state.showForm ? 'show form' : 'remove form'} </button>
-                {this.state.showForm ? this.noteForm() : null }
-            </div>
+            <>
+                <AddNoteButtonContainer>
+                    <Button onClick={this.renderForm}> ADD NOTE </Button>
+                </AddNoteButtonContainer>
+                {this.state.showForm && this.noteForm() }
+            </>
         )
     }
 }
@@ -140,3 +179,4 @@ AddNote.propTypes = {
     noteContent: PropTypes.string, 
     showForm: PropTypes.bool,
 };
+

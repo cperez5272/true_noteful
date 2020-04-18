@@ -1,13 +1,19 @@
 .App {
   text-align: center;
 }
+body, html, * {
+  margin: 0; 
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #F9FCFF;
+}
 header {
   display: flex;
   justify-content: space-around;
   align-items: center;
   min-height: 10vh;
-  background: rgb(72, 72, 139);
-  color: wheat;
+  color: #26547C;
+  font-size: 2em; 
 }
 .folder_list {
     float: left;
@@ -32,11 +38,6 @@ header {
   float: right;
   width: 35%;
   margin-top: -15px;
-}
-.note-instance {
-  background-color: skyblue; 
-  border: 1px solid white; 
-  /* max-width: 200px; */
 }
 .active {
   background-color: green;

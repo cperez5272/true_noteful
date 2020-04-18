@@ -1,5 +1,6 @@
 import React from 'react';
 import NoteInstance from './NoteInstance';
+import styled from 'styled-components';
 
 const AllNotes = (props) => {
   
@@ -8,14 +9,25 @@ const AllNotes = (props) => {
   }
 
   return (
-    <div>
-      { props.appProps.notes.length > 0 && renderNotes() }
-    </div>
+    <>
+      { props.appProps.notes.length > 0 && 
+        <RenderedNotesContainer>
+          { renderNotes() }
+        </RenderedNotesContainer>
+      }
+    </>
   )
 }
 
 
 export default AllNotes; 
+
+const RenderedNotesContainer = styled.div`
+    display: flex; 
+    flex-direction: column; 
+    width: 50%;  
+    align-items: center;
+`
 
 
 

@@ -114,7 +114,7 @@ class App extends React.Component {
         <Router>
           <div className="App">
 
-            <Link to='/'>
+            <Link to='/' style={{textDecoration: 'none'}}>
               <header>
                 <h1 onClick={() => this.setState({ currentFolderId: 0 })}>Noteful</h1>
               </header>
@@ -175,6 +175,5 @@ class App extends React.Component {
 App.propTypes = {
     renderNoteNames: PropTypes.func
 }
-
 
 export default App;
