@@ -41,6 +41,7 @@ class AddFolder extends React.Component {
             return response.json()
         }).then(data => {
             this.props.addFolder(data);
+            this.setState({showForm: false});
         }).catch(error => {
             console.log(error)
         })
@@ -89,7 +90,7 @@ class AddFolder extends React.Component {
                         <h2 style={{width: '100%', textAlign: 'center', marginBottom: '20px'}}>Folder Form</h2>
                         <label>Name:</label>
                         <Input type='text' onChange={event => this.updateFolder(event.target.value)} />
-                        <Button type='submit'> Add New Folder</Button>
+                        <Button> Add New Folder</Button>
 
                         { this.state.validationErrorInfo !== "" && 
                             <ValidationError 
@@ -121,5 +122,5 @@ const StyledButton = styled(Button)`
     left: 30px; 
     position: absolute; 
     z-index: 3; 
-    top: 20px;
+    top: 30px;
 `

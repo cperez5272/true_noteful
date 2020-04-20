@@ -15,26 +15,37 @@ const NoteInstance = (props) => {
   }
 
   return (
-    <NoteInstanceContainer className="note-instance">
-      <StyledLink to={`/notes/${note.id}`} > {note.name} </StyledLink>
-    </NoteInstanceContainer>
+    <StyledLink to={`/notes/${note.id}`}> 
+      <NoteInstanceContainer className="note-instance">
+          <img src="/iconmonstr-note-14.svg" />
+          {note.name} 
+      </NoteInstanceContainer>
+    </StyledLink>
   )
 }
 
 export default withRouter(NoteInstance);
 
-const NoteInstanceContainer = styled.div`
-  padding: 20px; 
-  margin-top: 10px; 
-  border: 5px solid #EF476F; 
-  color: #EF476F; 
-  width: 90%; 
-  border-radius: 4px; 
-`
-
 const StyledLink = styled(Link)`
   text-decoration: none; 
-  color: #FFD166; 
-  font-size: 18px; 
+  font-size: 20px; 
   font-weight: bold; 
+  width: 90%; 
+  background-color: #F4F7F9; 
+  padding: 20px 50px; 
+  border-radius: 4px; 
+  margin-top: 10px; 
+
+  :hover {
+    border: 1px solid #235789;
+    background-color: #F4F7F9;
+  }
+`
+
+const NoteInstanceContainer = styled.div`
+  margin-top: 10px; 
+  color: #EF476F; 
+  color: #235789; 
+  display: flex; 
+  justify-content: space-between;
 `

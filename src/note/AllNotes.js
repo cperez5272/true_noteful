@@ -11,7 +11,7 @@ const AllNotes = (props) => {
   return (
     <>
       { props.appProps.notes.length > 0 && 
-        <RenderedNotesContainer>
+        <RenderedNotesContainer className="allNotes">
           { renderNotes() }
         </RenderedNotesContainer>
       }

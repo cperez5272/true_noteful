@@ -4,14 +4,15 @@ export const AddNoteButtonContainer = styled.div`
     position: absolute; 
     z-index: 3; 
     right: 50px; 
-    top: 20px;
+    top: 30px;
 
 `
 
 export const Button = styled.button`
     border-radius: 4px; 
     background-color: white; 
-    font-size: 14px;
+    font-size: 12px;
+    font-family: "Lato", sans-serif;
 
     :hover {
         box-shadow: inset -1px 0px 5px -1px rgba(0,0,0,0.5);
@@ -80,7 +81,7 @@ export const CloseButton = styled.div`
 `
 
 export const CustomButton = styled(Button)`
-    margin: 10px 0 20px 0;
+    margin: 20px 0 20px 0;
 `
 
 export const Select = styled.select`

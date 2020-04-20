@@ -3,6 +3,7 @@ import './App.css';
 import NoteContainer from './note/NoteContainer'
 import FolderContainer from './folder/FolderContainer'
 import { Link, Switch, Route, BrowserRouter as Router } from 'react-router-dom'
+import styled from 'styled-components';
 import Context from './Context'
 import PropTypes from 'prop-types'
 import ErrorBoundary from './ErrorBoundary';
@@ -14,7 +15,7 @@ class App extends React.Component {
   state = {
     folders: [],
     notes: [],
-    currentFolderId: 2,
+    currentFolderId: '',
     currentNoteContent: '',
     index: 0
   }
@@ -77,6 +78,7 @@ class App extends React.Component {
   // what you see above and below give you the same results just in different ways.
 
   renderNoteNames = () => {
+    console.log(this.state.notes);
     if (this.state.currentFolderId === '') {
       return this.state.notes.map(note => <NoteInstance key={note.id} note={note} deleteNoteRequest={this.deleteNoteRequest}/>)
     } else {
@@ -114,18 +116,18 @@ class App extends React.Component {
         <Router>
           <div className="App">
 
-            <Link to='/' style={{textDecoration: 'none'}}>
-              <header>
-                <h1 onClick={() => this.setState({ currentFolderId: 0 })}>Noteful</h1>
+              <header style={{backgroundColor: '#EF476F', marginBottom: '20px'}}>
+                <Link to='/' style={{textDecoration: 'none'}}>
+                  <StyledHeader onClick={() => this.setState({ currentFolderId: '' })}>Noteful</StyledHeader>
+                </Link>
               </header>
-            </Link>
 
             <Switch>
               <Route 
                 exact 
                 path="/" 
                 render={() => 
-                  <HomeContainer
+                  <FolderContainer
                     folders={folders}
                     clickHandler={this.folderClickHandler}
                     renderNoteNames={this.renderNoteNames}
@@ -177,3 +179,13 @@ App.propTypes = {
 }
 
 export default App;
+
+const StyledHeader = styled.h1`
+  color: #235789; 
+  height: 100px; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  color: #F4F7F9; 
+  font-family: "Montserrat", sans-serif; 
+`

@@ -7,7 +7,7 @@ const HomeContainer = (props) => {
   console.log(props)
 
   return (
-    <Container>
+    <Container className="homeContainer">
     
       <FolderContainer appProps={props}/>
       <AllNotes appProps={props}/>
