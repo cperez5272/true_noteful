@@ -5,6 +5,7 @@ export const AddNoteButtonContainer = styled.div`
     z-index: 3; 
     right: 50px; 
     top: 30px;
+
 `
 
 export const Button = styled.button`
@@ -12,6 +13,7 @@ export const Button = styled.button`
     background-color: white; 
     font-size: 12px;
     font-family: "Lato", sans-serif;
+
     :hover {
         box-shadow: inset -1px 0px 5px -1px rgba(0,0,0,0.5);
     }
@@ -70,6 +72,7 @@ export const CloseButton = styled.div`
     position: absolute; 
     right: 10px;
     top: 10px; 
+
     :hover {
         color: red; 
         cursor: pointer; 
