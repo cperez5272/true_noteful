@@ -125,7 +125,7 @@ class AddNote extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="add-note-form">
                 <button onClick={this.renderForm}> {!this.state.showForm ? 'show form' : 'remove form'} </button>
                 {this.state.showForm ? this.noteForm() : null }
             </div>

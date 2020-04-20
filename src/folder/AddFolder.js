@@ -1,16 +1,31 @@
 import React from 'react'
-import ValidationError from '../ValidationError'
+import ValidationError from '../ValidationError';
+import styled from 'styled-components';
+import {
+    AddNoteButtonContainer, 
+    Button, 
+    FormContainer, 
+    LabelContainer, 
+    Input,  
+    CloseButton, 
+    CustomButton, 
+    Select
+    } from '../styled-components.js'
 
 class AddFolder extends React.Component {
-    constructor() {
-        super()
-        this.state = {
+        state = {
             showForm: false,
             folderName: '',
+            validationErrorInfo: ''
         }
-    }
-$
+
     postFolderRequest = () => {
+        const { validationErrorInfo } = this.state; 
+        console.table(this.state); 
+        if (validationErrorInfo !== '') {
+            throw new Error({error: this.state.validationErrorInfo});
+        }
+        
         fetch(`${process.env.REACT_APP_NOTEFUL_API}/folders/`, {
             method: 'POST',
             headers: {
@@ -26,6 +41,7 @@ $
             return response.json()
         }).then(data => {
             this.props.addFolder(data);
+            this.setState({showForm: false});
         }).catch(error => {
             console.log(error)
         })
@@ -37,13 +53,6 @@ $
         this.setState({
             folderName: newFolders
         })
-        console.log('click!')
-    }
-
-    FormHandler = () => {
-        this.setState({
-            showForm: !this.state.showForm
-        })
     }
 
     updateFolder = (name) => {
@@ -52,50 +61,66 @@ $
         })
     }
 
+    setValidationErrors = (value) => this.setState({validationErrorInfo: value})
+
     validateNewFolder() {
         const name = this.state.folderName.trim();
         if (name.length === 0) {
-            return 'Name is required';
+            return this.setValidationErrors('Name is required');
         } else if (name.length < 3) {
-            return 'Name must be at least 3 characters long';
+            return this.setValidationErrors('Name must be at least 3 characters long');
         }
+        return true; 
     }
 
     handleFormSubmit = (event) => {
-        event.preventDefault()
-        console.log('Name: ', this.state.folderName)
+        event.preventDefault();
+        this.validateNewFolder(); 
+        this.postFolderRequest(); 
     }
+
+    clearError = () => this.setState({validationErrorInfo: ''});
 
     hiddenForm = () => {
         return (
-            <div>
-                <form onSubmit={event => this.handleFormSubmit(event)}>
-                    <h2>Folder Form</h2>
-                    <div>
+            <>
+                <FormContainer onSubmit={event => this.handleFormSubmit(event)}>
+                    <LabelContainer>
+                        <CloseButton onClick={() => this.setState({showForm: false})}> X </CloseButton>
+                        <h2 style={{width: '100%', textAlign: 'center', marginBottom: '20px'}}>Folder Form</h2>
                         <label>Name:</label>
-                        <input type='text' onChange={event => this.updateFolder(event.target.value)} />
-                        {this.state.showForm && (<ValidationError message={this.validateNewFolder()} />)}
-                        <button type='submit' disabled={this.validateNewFolder()} onClick={() => this.postFolderRequest(this.addFolder)}>Add New Folder</button>
-                    </div>
-                </form>
-            </div>
-        )
-    }
+                        <Input type='text' onChange={event => this.updateFolder(event.target.value)} />
+                        <Button> Add New Folder</Button>
 
-    surpiseForm = () => {
-        if (this.state.showForm) {
-            return this.hiddenForm()
-        }
+                        { this.state.validationErrorInfo !== "" && 
+                            <ValidationError 
+                                validationErrorInfo={this.state.validationErrorInfo}
+                                clearError={this.clearError}
+                            />
+                        }
+                    </LabelContainer>
+                </FormContainer>
+            </>
+        )
     }
 
     render() {
         return (
-            <div>
-                <button onClick={this.FormHandler}>Click For New Folder</button>
-                {this.surpiseForm()}
-            </div>
+            <>
+                <>
+                    <StyledButton onClick={() => this.setState({showForm: !this.state.showForm})}> ADD FOLDER </StyledButton>
+                </>
+                {this.state.showForm && this.hiddenForm() }
+            </>
         )
     }
 }
 
-export default AddFolder
+export default AddFolder; 
+
+const StyledButton = styled(Button)`
+    left: 30px; 
+    position: absolute; 
+    z-index: 3; 
+    top: 30px;
+`
