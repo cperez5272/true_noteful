@@ -10,6 +10,7 @@ import ErrorBoundary from './ErrorBoundary';
 import HomeContainer from './HomeContainer';
 import NoteInstance from './note/NoteInstance';
 
+console.log('its over? ;c')
 class App extends React.Component {
 
   state = {
@@ -74,7 +75,7 @@ class App extends React.Component {
       notes: newNotes
     })
   }
-
+ 
   // what you see above and below give you the same results just in different ways.
 
   renderNoteNames = () => {
