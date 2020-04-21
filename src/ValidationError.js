@@ -8,7 +8,7 @@ const ValidationError = (props) => {
         if (props.validationErrorInfo === '') return; 
         const timer = setTimeout(() => props.clearError(), 3000); 
         return () => clearTimeout(timer);
-    })
+    }, [props.showForm])
 
     return (
         <>

@@ -25,14 +25,20 @@ class AddNote extends React.Component {
         showForm: false,
         noteName: '',
         noteContent: '',
-        folderIdValue: 1, 
+        folderIdValue: "DEFAULT", 
         validationErrorInfo: ''
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.showForm === true && this.state.showForm === false) {
+            this.setState({validationErrorInfo: '', noteName: '', noteContent: ''});
+        }
     }
 
     postNoteRequest = async () => {
         try {
             const { noteName, noteContent, validationErrorInfo } = this.state;
-            const folderValue = this.state.folderIdValue
+            const folderIdValue = this.state.folderIdValue
             if (validationErrorInfo !== '') {
                 return; 
             } 
@@ -41,7 +47,7 @@ class AddNote extends React.Component {
                 name: noteName, 
                 content: noteContent, 
                 modified: d, 
-                folder_id: folderValue
+                folder_id: folderIdValue
             }
             const response = await fetch(`${process.env.REACT_APP_NOTEFUL_API}/notes/`, {
                 method: 'POST',
@@ -51,13 +57,13 @@ class AddNote extends React.Component {
                 body: JSON.stringify(obj)
             })
             const json = await response.json();
-            this.props.addNewNote(json);
+            console.log(json);
             this.setState({
                 noteName: "", 
                 noteContent: "", 
-                folderIdValue: ""
-            })
-            console.log(json);
+                folderIdValue: "DEFAULT"
+            }, () => console.log(this.state));
+            this.props.addNewNote(json);
         } catch (error) {
             console.log(error);
         }
@@ -93,6 +99,8 @@ class AddNote extends React.Component {
             return this.setValidationErrors('Please provide info');
         } else if (info.length < 3) {
             return this.setValidationErrors('Your info should be at least 3 characters long');
+        } else if (this.state.folderIdValue === "DEFAULT") {
+            return this.setValidationErrors('Please select a folder');
         }
         return true;
     }
@@ -101,19 +109,12 @@ class AddNote extends React.Component {
         this.setState({folderIdValue: parseInt(event.target.value)});
     }
 
-    clickHandler = () => {
-        const isValid = this.validateNewNote(); 
-        if (isValid === true) {
-            this.postNoteRequest();
-            this.renderForm(); 
-        }
-    }
-
     pathToFolder = () => {
         return (
             <div>
                 <label>Pick a folder</label>
                 <Select value={this.state.folderIdValue} onChange={this.changeHandler}>
+                    <option value="DEFAULT" > Select Folder </option>
                     {this.context.folders.map(folder => {
                         return(      
                             <option
@@ -130,27 +131,32 @@ class AddNote extends React.Component {
     }
 
     handleFormSubmit = (event) => {
-        event.preventDefault()
+        event.preventDefault();
+        const isValid = this.validateNewNote(); 
+        if (isValid === true) {
+            this.postNoteRequest();
+            this.renderForm(); 
+        }
     }
 
     noteForm = () => {
         return(
             <>
-                <FormContainer onSubmit = {event => this.handleFormSubmit(event)}>
+                <FormContainer onSubmit={event => this.handleFormSubmit(event)}>
                     <LabelContainer>
                         <CloseButton onClick={this.renderForm}> X </CloseButton>
                         <h2 style={{textAlign: 'center', marginBottom: '20px', width: '100%'}}>Note Form</h2>
                         <label>Name:</label>
                         <Input type='text' name='noteName' value={this.state.noteName} onChange={this.updateNote}/>
                         <TextArea type='text' name='noteContent' value={this.state.noteContent} onChange={this.updateNote}/>
-                        <CustomButton type='submit' onClick={this.clickHandler}> ADD NOTE </CustomButton>
+                        <CustomButton type='submit'> ADD NOTE </CustomButton>
                         {this.pathToFolder()}
-
 
                     { this.state.validationErrorInfo !== "" && 
                         <ValidationError 
                             validationErrorInfo={this.state.validationErrorInfo}
                             clearError={this.clearError}
+                            showForm={this.state.showForm}
                         />
                     }
 

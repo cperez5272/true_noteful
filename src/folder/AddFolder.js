@@ -89,7 +89,7 @@ class AddFolder extends React.Component {
                         <CloseButton onClick={() => this.setState({showForm: false})}> X </CloseButton>
                         <h2 style={{width: '100%', textAlign: 'center', marginBottom: '20px'}}>Folder Form</h2>
                         <label>Name:</label>
-                        <Input type='text' onChange={event => this.updateFolder(event.target.value)} />
+                        <Input type='text' onChange={event => this.updateFolder(event.target.value)} required/>
                         <Button> Add New Folder</Button>
 
                         { this.state.validationErrorInfo !== "" && 
